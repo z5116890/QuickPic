@@ -1,3 +1,5 @@
+<img width="1255" alt="Screen Shot 2021-03-12 at 1 44 20 am" src="https://user-images.githubusercontent.com/27755962/110813848-fd5bcd00-82dc-11eb-8c45-58f1c2865807.png">
+
 # Vanilla JS: Quickpic
 
 ## Background
