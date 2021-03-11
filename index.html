@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Quickpic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- You can add your styles and scripts here -->
+    <link rel="stylesheet" type="text/css" media="screen" href="styles/provided.css" />
+    <script type="module" src="src/helpers.js"></script>
+    <script type="module" src="src/api.js"></script>
+    <script type="module" src="src/authentication.js"></script>
+    <script type="module" src="src/feed.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+<body>
+    <!-- This is an example app structure, you can modify this as much as you choose --> 
+    <header class="banner">
+        <h1 id="logo">Quickpic</h1>
+        <p id="offline-mode">in offline mode</p>
+        <ul class="navigation">
+            <button type="button" id="login" class="nav-item btn btn-outline-primary">Login</button>
+            <button type="button" id="register" class="nav-item btn btn-outline-info">Register</button>
+            <button type="button" id="add-post" class="nav-item btn btn-primary">&#43;<span id="add-post-span"> Add Post</span></button>
+            <button type="button" id="notifications-button" class="nav-item btn btn-outline-primary">Notifications</button>
+            <button type="button" id="my-profile" class="nav-item btn btn-outline-dark">My Profile</button>
+            <button type="button" id="logout" class="nav-item btn btn-outline-secondary">Logout</button>
+        </ul>
+        <div id="hamburger-menu">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </header>
+    <main role="main">
+        <div id="hamburger-menu-options">
+            <div id="mobile-menu">
+                <a id="login-mobile">Login</a>
+                <a id="register-mobile">Register</a>
+                <a id="add-post-mobile">Add Post</a>
+                <a id="notifications-button-mobile">Notifications</a>
+                <a id="my-profile-mobile">My Profile</a>
+                <a id="logout-mobile">Logout</a>
+            </div>
+        </div>
+        <!-- app goes here -->
+        <!-- LOGIN -->
+        <div id="warning">
+            <div id="warning-content">
+                <span id="warningClose">&times;</span>
+                <div id="delete-container">
+                    <p>Are you sure you want to delete this post?</p>
+                    <div id="delete-buttons">
+                        <button id="yes-delete" class="btn btn-danger">Yes</button>
+                        <button id="no-delete" class="btn btn-primary">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal" >
+            <!-- Modal content -->
+            <div id="modal-content">
+                <span id="modalClose">&times;</span>
+                <div id="add-post-container">
+                    <form id="post-form" method="POST">
+                        <h2>Post Something:</h2>
+                        <div id="upload-photo">
+                            <input id="input-photo" class="btn btn-light" type="file" value="false">
+                        </div>
+                        <label for="description">Description:</label>
+                        <br>
+                        <textarea id="description" rows="4" cols="40" form="post-form">Enter description...</textarea>
+                        <br>
+                        <button type="submit" id="postSubmit" class="btn btn-outline-success" disabled>Post</button>
+                    </form>
+                </div>
+                <div id="edit-post-container">
+                    <form id="edit-form">
+                        <h2>Edit Post:</h2>
+                        <div id="current-photo">
+                            <input id="edit-photo-button" class="btn btn-light" type="file" value="true">
+                        </div>
+                        <label for="current-description">Edit Description:</label>
+                        <br>
+                        <textarea id="current-description" rows="4" cols="40" form="edit-form"></textarea>
+                        <br>
+                        <div id="edit-submit-container">
+                            <button id="edit-delete" class="btn btn-danger">Delete</button>
+                            <button type="submit" id="editSubmit" class="btn btn-warning" disabled>Edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="update-user-container">
+                    <div id="update-forms">
+                        <h2 id="update-heading">Update Details:</h2>
+                        <p id="update-message"></p>
+                        <form id="update-name-form">
+                            <div id="update-name-container">
+                                <label for="update-name">Change Name:</label>
+                                <div class="input-submit">
+                                    <input id="update-name" class="update-input" type="text">
+                                    <button type="submit" id="submit-name" class="btn btn-outline-dark" disabled>Change Name</button>
+                                </div>
+
+                            </div>
+                        </form>
+                        <form id="update-email-form">
+                            <div id="update-email-container">
+                                <label for="update-email">Change Email:</label>
+                                <div class="input-submit">
+                                    <input id="update-email" class="update-input" type="text">
+                                    <button type="submit" id="submit-email" class="btn btn-outline-dark" disabled>Change Email</button>
+                                </div>
+
+                            </div>
+                        </form>
+                        <form id="update-password-form">
+                            <div id="update-password-container">
+                                <label>New Password:</label>
+                                <div class="input-submit">
+                                    <input id="update-password" class="update-input" type="password">
+                                </div>
+                                <label>Confirm Password:</label>
+                                <div class="input-submit">
+                                    <input id="update-confirm-password" class="update-input" type="password">
+                                    <button type="submit" id="submit-password" class="btn btn-outline-dark" disabled>Change Password</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="notifications-container">
+                    <h2>Notifications:</h2>
+                    <div id="notifications">
+                        <h3 id="notification-1"></h3>
+                        <h3 id="notification-2"></h3>
+                        <h3 id="notification-3"></h3>
+                        <h3 id="notification-4"></h3>
+                        <h3 id="notification-5"></h3>
+                    </div>
+                    <p>No more notifications.</p>
+                </div>
+                <div id="modal-msg">
+
+                </div>
+            </div>
+        </div>
+        <div id="loginDiv">
+            <form class="form-container" id="loginForm" method="POST">
+                <h1>Login</h1>
+                <div class="form-input-div">
+                    <div class="username-container">
+                        <label><b>Username</b></label>
+                        <br>
+                        <input name="username" id="login-username" type="text" placeholder="Enter Username" required>
+                    </div>
+                    <div class="password-container">
+                        <label><b>Password</b></label>
+                        <br>
+                        <input name="password" id="login-password" type="password" placeholder="Enter Password" required>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" id="loginSubmit" class="btn btn-outline-success" disabled>Login</button>
+                    <button type="button" id="loginClose" class="btn btn-outline-dark">Close</button>
+                </div>
+            </form>
+        </div>
+        <div id="registerDiv">
+            <form class="form-container" id="registerForm" method="POST">
+                <h1>Register</h1>
+                <p id="registration-message"></p>
+                <div class="form-input-div">
+                    <div class="username-container">
+                        <label><b>Username</b></label>
+                        <br>
+                        <input name="username" id="register-username" type="text" placeholder="Enter Username" required>
+                    </div>
+                    <div class="password-container">
+                        <label><b>Password</b></label>
+                        <br>
+                        <input name="password" id="register-password" type="password" placeholder="Enter Password" required>
+                    </div>
+                    <div class="password-container">
+                        <label><b>Confirm Password</b></label>
+                        <br>
+                        <input id="confirm-register-password" type="password" placeholder="Confirm Password" required>
+                    </div>
+                    <div class="email-container">
+                        <label><b>Email</b></label>
+                        <br>
+                        <input name="email" id="register-email" type="text" placeholder="Enter Email" required>
+                    </div>
+                    <div class="name-container">
+                        <label><b>Name</b></label>
+                        <br>
+                        <input name="name" id="register-name" type="text" placeholder="Enter Name" required>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" id="registerSubmit" class="btn btn-outline-success" disabled>Register</button>
+                    <button type="button" id="registerClose" class="btn btn-outline-dark">Close</button>
+                </div>
+            </form>
+        </div>
+        <div id="wrapper-container">
+            <div id="feed">
+
+            </div>
+            <p id="no-more-posts">No more posts to show.</p>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; Quickpic</p>
+    </footer>
+    <script type="module" src="src/static_buttons.js"></script>
+    <script type="module" src="src/dynamic_buttons.js"></script>
+    <script type="module" src="src/change_events.js"></script>
+    <script type="module" src="src/helpers.js"></script>
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>
